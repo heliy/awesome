@@ -40,9 +40,6 @@ require('naughty')
 -- Load Theme 主题
 beautiful.init(awful.util.getdir('config')..'/zenburn.lua')
 
--- wallpaper 桌面壁纸
-theme.wallpaper_cmd = { 'awsetbg -f ~/.config/awesome/ddes.png' }
-
 
 local settings  = { }
 
@@ -53,8 +50,9 @@ settings.browser = 'firefox'
 -- For Debian
 --terminal = "x-terminal-emulator"
 terminal = "terminator"
-editor = "emacs"
-editor_cmd = terminal .. " -e " .. editor
+--editor = "emacs"
+editor="leafpad"
+editor_cmd = terminal .. " " .. editor
 
 -- 在 theme 主题文件中定义
 -- awesome.font = "snap 9"
@@ -66,31 +64,31 @@ local separator_r = '| '
 
 -- }}}
 
---settings.layouts =
--- {
---     awful.layout.suit.tile,
-     --awful.layout.suit.tile.left,
-     --awful.layout.suit.tile.bottom,
-     --awful.layout.suit.tile.top,
-     --awful.layout.suit.fair,
-     --awful.layout.suit.fair.horizontal,
-     --awful.layout.suit.spiral,
-     --awful.layout.suit.spiral.dwindle,
-     --awful.layout.suit.max,
-     --awful.layout.suit.max.fullscreen,
-     --awful.layout.suit.magnifier,
-     --awful.layout.suit.floating
- --}
-
--- 自定义支持的窗口 布局样式
 settings.layouts =
 {
     awful.layout.suit.tile,
-    awful.layout.suit.tile.bottom,
-    awful.layout.suit.max,
-    awful.layout.suit.magnifier,
-    awful.layout.suit.floating
-}
+     awful.layout.suit.tile.left,
+     awful.layout.suit.tile.bottom,
+     awful.layout.suit.tile.top,
+     awful.layout.suit.fair,
+     awful.layout.suit.fair.horizontal,
+     awful.layout.suit.spiral,
+     awful.layout.suit.spiral.dwindle,
+     awful.layout.suit.max,
+     awful.layout.suit.max.fullscreen,
+     awful.layout.suit.magnifier,
+     awful.layout.suit.floating
+ }
+
+-- 自定义支持的窗口 布局样式
+-- settings.layouts =
+-- {
+--     awful.layout.suit.tile,
+--     awful.layout.suit.tile.bottom,
+--     awful.layout.suit.max,
+--     awful.layout.suit.magnifier,
+--     awful.layout.suit.floating
+-- }
 
 --}}}
 
@@ -101,7 +99,6 @@ tags.settings = {
     { name = 'fi', layout = settings.layouts[1]  },
     { name = 'sy', layout = settings.layouts[1]  },
     { name = 'de', layout = settings.layouts[1]  },
-    { name = 'bo', layout = settings.layouts[1]  },
     { name = 'mu', layout = settings.layouts[1]  },
     { name = 'dl', layout = settings.layouts[1]  }
 }
@@ -235,13 +232,14 @@ batwidget     = widget({ type = 'textbox', name = 'batwidget' })
 
 function battery(id)
     -- Ugly long HAL string
-    hal = io.popen('hal-get-property --udi /org/freedesktop/Hal/devices/computer_power_supply_battery_'..id..' --key battery.charge_level.percentage')
+    hal = io.popen('acpitool -b')
     if hal then
-        charge = hal:read('*all')
+        charge = hal:read()
         hal:close()
     end
 
-    return charge:gsub("\n", '')..'%'.. ' |'
+    -- string.match(charge, "(%d*+%p%d+)%%")
+    return charge
 end
 
 battimer = timer { timeout = 30 }
@@ -508,11 +506,15 @@ local globalkeys = awful.util.table.join(
     awful.key({ settings.modkey            }, 'r',     function () promptbox[mouse.screen]:run() end),
 
     -- 打开终端  
-    awful.key({ settings.modkey            }, 'x',     function () awful.util.spawn("rox") end),
-    awful.key({ settings.modkey,           }, "Return", function () awful.util.spawn(terminal) end),
+--    awful.key({ settings.modkey            }, 'x',     function () awful.util.spawn("rox") end),
+    awful.key({ settings.modkey           }, "Return", function () awful.util.spawn(terminal) end),
     -- 打开浏览器  
     awful.key({ settings.modkey            }, 'w',     function () awful.util.spawn(settings.browser) end),
 
+    --emacs编辑器
+    awful.key({ settings.modkey            }, 'e',     function () awful.util.spawn("emacs") end),
+    --pcmanfm文件管理
+    awful.key({ settings.modkey            }, 'p',     function () awful.util.spawn("pcmanfm") end),
 
 
 
