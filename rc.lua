@@ -232,14 +232,13 @@ batwidget     = widget({ type = 'textbox', name = 'batwidget' })
 
 function battery(id)
     -- Ugly long HAL string
-    hal = io.popen('acpitool -b')
+    hal = io.popen('acpitool -b | cut -d , -f 2')
     if hal then
         charge = hal:read()
         hal:close()
     end
 
-    -- string.match(charge, "(%d*+%p%d+)%%")
-    return charge
+    return charge .. '|'
 end
 
 battimer = timer { timeout = 30 }
@@ -510,6 +509,8 @@ local globalkeys = awful.util.table.join(
     awful.key({ settings.modkey           }, "Return", function () awful.util.spawn(terminal) end),
     -- 打开浏览器  
     awful.key({ settings.modkey            }, 'w',     function () awful.util.spawn(settings.browser) end),
+    -- 查看网络
+    awful.key({ settings.modkey            }, 'n',     function () awful.util.spawn("nm-applet") end),
 
     --emacs编辑器
     awful.key({ settings.modkey            }, 'e',     function () awful.util.spawn("emacs") end),
