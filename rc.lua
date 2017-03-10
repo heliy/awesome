@@ -96,6 +96,7 @@ tags.settings = {
     { name = 'na', layout = settings.layouts[1]  },
     { name = 'pr', layout = settings.layouts[1]  },
     { name = 'we', layout = settings.layouts[1]  },
+    { name = 'to', layout = settings.layouts[1]  },
     { name = 'fi', layout = settings.layouts[1]  },
     { name = 'sy', layout = settings.layouts[1]  },
     { name = 'de', layout = settings.layouts[1]  },
